@@ -4,17 +4,19 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
+// Rich Menu IDs
 const RICH_MENUS = {
   resident: 'richmenu-c63530939b6203e73f72e374db402136',
   technician: 'richmenu-a4c247adf3dcbe494c411138c1f84731',
 };
 
-const CHANNEL_ACCESS_TOKEN = 'qIvNO1l0vxERUs0TwZWrY4AtcpuR9FEGZLkXLvue0ooF1NxYNnnBOSfGNVdLB0i2T4ymCXsr/9mRSGdAjixhoHwjPFwA2eEzz0URvWSsFE8/PwH+9nHNEmjZ//s3CEwUDHhvW6vKwdutJ6w6M3cufAdB04t89/1O/w1cDnyilFU=';
+// LINE Channel Access Token
+const CHANNEL_ACCESS_TOKEN = 'YOUR_CHANNEL_ACCESS_TOKEN_HERE'; // แนะนำอย่า hardcode
 
+// POST /api/register
 router.post('/', async (req, res) => {
   const { userId, role } = req.body;
   console.log(`📥 ได้รับคำขอเปลี่ยน Rich Menu: userId=${userId}, role=${role}`);
-
 
   if (!userId || !role) {
     return res.status(400).json({ message: 'userId และ role จำเป็น' });
@@ -27,14 +29,7 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    // 1. ลบ Rich Menu เดิม (ถ้ามี)
-    await axios.delete(`https://api.line.me/v2/bot/user/${userId}/richmenu`, {
-      headers: {
-        Authorization: `Bearer ${CHANNEL_ACCESS_TOKEN}`,
-      },
-    });
-
-    // 2. ผูก Rich Menu ใหม่
+    // ผูก Rich Menu ให้ user
     await axios.post(
       `https://api.line.me/v2/bot/user/${userId}/richmenu/${richMenuId}`,
       {},
@@ -46,10 +41,10 @@ router.post('/', async (req, res) => {
       }
     );
 
-    return res.status(200).json({ message: 'เปลี่ยน Rich Menu เรียบร้อย' });
+    return res.status(200).json({ message: '✅ เปลี่ยน Rich Menu เรียบร้อยแล้ว' });
   } catch (err) {
     console.error('❌ Error changing Rich Menu:', err.response?.data || err.message);
-    return res.status(500).json({ message: 'เปลี่ยน Rich Menu ล้มเหลว' });
+    return res.status(500).json({ message: '❌ เปลี่ยน Rich Menu ล้มเหลว', error: err.response?.data || err.message });
   }
 });
 
