@@ -4,6 +4,7 @@ const router = express.Router();
 const axios = require('axios');
 const RICH_MENUS = require('../richmenus');
 
+require('dotenv').config();
 const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
 console.log('🔑 Channel Access Token:', CHANNEL_ACCESS_TOKEN ? '✅ มี token' : '❌ ไม่มี token');
 
