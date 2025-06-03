@@ -1,19 +1,10 @@
-// /routes/register.js
-
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const RICH_MENUS = require('../richmenus');
 
-// Rich Menu IDs
-const RICH_MENUS = {
-  resident: 'richmenu-c63530939b6203e73f72e374db402136',
-  technician: 'richmenu-a4c247adf3dcbe494c411138c1f84731',
-};
+const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
 
-// LINE Channel Access Token
-const CHANNEL_ACCESS_TOKEN = 'YOUR_CHANNEL_ACCESS_TOKEN_HERE'; // แนะนำอย่า hardcode
-
-// POST /api/register
 router.post('/', async (req, res) => {
   const { userId, role } = req.body;
   console.log(`📥 ได้รับคำขอเปลี่ยน Rich Menu: userId=${userId}, role=${role}`);
@@ -29,7 +20,7 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    // ผูก Rich Menu ให้ user
+    // เปลี่ยน Rich Menu
     await axios.post(
       `https://api.line.me/v2/bot/user/${userId}/richmenu/${richMenuId}`,
       {},
